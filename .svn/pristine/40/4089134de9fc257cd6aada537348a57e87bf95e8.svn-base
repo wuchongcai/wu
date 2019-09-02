@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyxy.dao.JurisdictionMapper" >
+  <resultMap id="BaseResultMap" type="com.hyxy.entity.Jurisdiction" >
+    <id column="JurisdictionID" property="jurisdictionid" jdbcType="INTEGER" />
+    <result column="RoleID" property="roleid" jdbcType="INTEGER" />
+    <result column="FunctionID" property="functionid" jdbcType="INTEGER" />
+    <result column="yes" property="yes" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from jurisdiction
+    where JurisdictionID = #{jurisdictionid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hyxy.entity.Jurisdiction" >
+    insert into jurisdiction (JurisdictionID, RoleID, FunctionID, 
+      yes)
+    values (#{jurisdictionid,jdbcType=INTEGER}, #{roleid,jdbcType=INTEGER}, #{functionid,jdbcType=INTEGER}, 
+      #{yes,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hyxy.entity.Jurisdiction" >
+    update jurisdiction
+    set RoleID = #{roleid,jdbcType=INTEGER},
+      FunctionID = #{functionid,jdbcType=INTEGER},
+      yes = #{yes,jdbcType=INTEGER}
+    where JurisdictionID = #{jurisdictionid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select JurisdictionID, RoleID, FunctionID, yes
+    from jurisdiction
+    where JurisdictionID = #{jurisdictionid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select JurisdictionID, RoleID, FunctionID, yes
+    from jurisdiction
+  </select>
+  
+  
+  <select id="">
+  SELECT `function`.*,a.*,b.FunctionName `name` 
+  FROM `function` 
+  LEFT JOIN (SELECT * FROM jurisdiction where  RoleID = #{roleid}) a 
+  ON `function`.FunctionID = a.FunctionID 
+  LEFT JOIN `function` b ON `function`.SuperID = b.FunctionID 
+  limit ${begin}, ${number} 
+  
+  </select>
+  
+  <update id="updateById">
+  UPDATE jurisdiction 
+  SET yes = ${yes} 
+  WHERE FunctionID = ${functionid} 
+  AND RoleID = ${roleid}
+  </update>
+  
+  <insert id="insertinto">
+  INSERT INTO jurisdiction VALUES(null,${roleid},${functionid},${yes})
+  </insert>
+  
+  
+  
+  
+</mapper>

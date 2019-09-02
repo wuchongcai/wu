@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyxy.dao.TeacherMapper" >
+  <resultMap id="BaseResultMap" type="com.hyxy.entity.Teacher" >
+    <id column="Teacher_Number" property="teacherNumber" jdbcType="INTEGER" />
+    <result column="TeacherName" property="teachername" jdbcType="VARCHAR" />
+    <result column="Password" property="password" jdbcType="VARCHAR" />
+    <result column="StuClass" property="stuclass" jdbcType="VARCHAR" />
+    <result column="Sex" property="sex" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from teacher
+    where Teacher_Number = #{teacherNumber,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hyxy.entity.Teacher" >
+    insert into teacher (Teacher_Number, TeacherName, Password, 
+      StuClass, Sex)
+    values (#{teacherNumber,jdbcType=INTEGER}, #{teachername,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{stuclass,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hyxy.entity.Teacher" >
+    update teacher
+    set TeacherName = #{teachername,jdbcType=VARCHAR},
+      Password = #{password,jdbcType=VARCHAR},
+      StuClass = #{stuclass,jdbcType=VARCHAR},
+      Sex = #{sex,jdbcType=VARCHAR}
+    where Teacher_Number = #{teacherNumber,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select Teacher_Number, TeacherName, Password, StuClass, Sex
+    from teacher
+    where Teacher_Number = #{teacherNumber,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select Teacher_Number, TeacherName, Password, StuClass, Sex
+    from teacher
+  </select>
+  
+  <select id="selectTeacherXinxi" resultType="Teacher">
+  SELECT teacher.Teacher_Number teacherNumber,
+  teacher.TeacherName teachername,teacher.StuClass stuclass,
+  course.CourseName 'course.coursename' 
+  FROM teacher INNER JOIN course 
+  ON teacher.Teacher_Number = course.Teacher_Number
+  </select>
+  
+  
+  
+  
+  
+  
+</mapper>

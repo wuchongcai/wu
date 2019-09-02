@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyxy.dao.ScoreMapper">
+	<resultMap id="BaseResultMap" type="com.hyxy.entity.Score">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="Student_Number" property="studentNumber"
+			jdbcType="INTEGER" />
+		<result column="CourseNumber" property="coursenumber" jdbcType="VARCHAR" />
+		<result column="Grade" property="grade" jdbcType="INTEGER" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from score
+		where ID = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.hyxy.entity.Score">
+		insert into score (ID, Student_Number, CourseNumber,
+		Grade)
+		values (#{id,jdbcType=INTEGER}, #{studentNumber,jdbcType=INTEGER},
+		#{coursenumber,jdbcType=VARCHAR},
+		#{grade,jdbcType=INTEGER})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.hyxy.entity.Score">
+		update score
+		set Student_Number = #{studentNumber,jdbcType=INTEGER},
+		CourseNumber = #{coursenumber,jdbcType=VARCHAR},
+		Grade = #{grade,jdbcType=INTEGER}
+		where ID = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select ID, Student_Number, CourseNumber, Grade
+		from score
+		where ID = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select ID, Student_Number, CourseNumber, Grade
+		from score
+	</select>
+
+	<resultMap type="com.hyxy.entity.Score" id="select">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="Student_Number" property="studentNumber"
+			jdbcType="INTEGER" />
+		<result column="CourseNumber" property="cs" jdbcType="VARCHAR" />
+		<result column="Grade" property="grade" jdbcType="INTEGER" />
+		<collection property="course" ofType="com.hyxy.entity.Course">
+			<id column="CourseNumber" property="coursenumber" />
+			<result column="CourseName" property="coursename" />
+		</collection>
+	</resultMap>
+
+	<select id="selectGrade" resultMap="select">
+		SELECT course.*,score.Grade,student.Student_Number Student_Number
+		FROM score,course,student
+		WHERE score.Student_Number = student.Student_Number
+		AND score.CourseNumber = course.CourseNumber
+		AND student.Student_Number = #{studentNumber}
+		AND YearClass = #{year}
+		AND CourseSemester = #{term}
+		LIMIT ${begin}, ${number} 
+	</select>
+	
+	
+	<select id="selectGradeByTerm" resultMap="select">
+	SELECT course.*,score.Grade,student.Student_Number Student_Number
+		FROM score,course,student
+		WHERE score.Student_Number = student.Student_Number
+		AND score.CourseNumber = course.CourseNumber
+		AND student.Student_Number = #{studentNumber}
+		AND CourseSemester = #{term}
+		LIMIT ${begin}, ${number} 
+	</select>
+	
+	<select id="selectGradeByYear" resultMap="select">
+	SELECT course.*,score.Grade,student.Student_Number Student_Number
+		FROM score,course,student
+		WHERE score.Student_Number = student.Student_Number
+		AND score.CourseNumber = course.CourseNumber
+		AND student.Student_Number = #{studentNumber}
+		AND YearClass = #{year}
+		LIMIT ${begin}, ${number} 
+	</select>
+	
+	<select id="selectGradeBy" resultMap="select">
+	SELECT course.*,score.Grade,student.Student_Number Student_Number
+		FROM score,course,student
+		WHERE score.Student_Number = student.Student_Number
+		AND score.CourseNumber = course.CourseNumber
+		AND student.Student_Number = #{studentNumber}
+		LIMIT ${begin}, ${number} 
+	</select>
+	
+	<select id="selectLimit" resultType="integer">
+	SELECT count(*) count from student,score,course 
+	WHERE student.Student_Number = score.Student_Number 
+	AND score.CourseNumber = course.CourseNumber 
+	AND student.Student_Number = #{studentNumber}
+	</select>
+	
+	<select id="selectLimetByTerm" resultType="integer">
+	SELECT count(*) count from student,score,course 
+	WHERE student.Student_Number = score.Student_Number 
+	AND score.CourseNumber = course.CourseNumber 
+	AND student.Student_Number = #{studentNumber}
+	AND CourseSemester = #{term}
+	</select>
+	
+	<select id="selectLimetByYear" resultType="integer">
+	SELECT count(*) count from student,score,course 
+	WHERE student.Student_Number = score.Student_Number 
+	AND score.CourseNumber = course.CourseNumber 
+	AND student.Student_Number = #{studentNumber}
+	AND YearClass = #{year}
+	</select>
+	
+	<select id="selectLimetgrade" resultType="integer">
+	SELECT count(*) count from student,score,course 
+	WHERE student.Student_Number = score.Student_Number 
+	AND score.CourseNumber = course.CourseNumber 
+	AND student.Student_Number = #{studentNumber}
+	AND YearClass = #{year}
+	AND CourseSemester = #{term}
+	</select>
+	
+	
+	
+	
+	<update id="updategrade">
+	UPDATE score SET Grade = ${grade} 
+	WHERE Student_Number = ${studentNumber} 
+	and CourseNumber = ${coursenumber}
+	</update>
+	
+	
+	
+	
+	
+	
+	
+</mapper>

@@ -1,0 +1,9 @@
+package com.hyxy.controller;
+
+//测试SVN
+public class SvnContorller {
+
+	public  void tt() {
+		System.out.println("sudjak");
+	}
+}

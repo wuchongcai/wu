@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyxy.dao.FunctionMapper" >
+  <resultMap id="BaseResultMap" type="com.hyxy.entity.Functionaa" >
+    <id column="FunctionID" property="functionid" jdbcType="INTEGER" />
+    <result column="FunctionName" property="functionname" jdbcType="VARCHAR" />
+    <result column="FunctionRank" property="functionrank" jdbcType="VARCHAR" />
+    <result column="SuperID" property="superid" jdbcType="INTEGER" />
+    <result column="FunctionUrl" property="functionurl" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from function
+    where FunctionID = #{functionid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hyxy.entity.Functionaa" >
+    insert into function (FunctionID, FunctionName, FunctionRank, 
+      SuperID, FunctionUrl)
+    values (#{functionid,jdbcType=INTEGER}, #{functionname,jdbcType=VARCHAR}, #{functionrank,jdbcType=VARCHAR}, 
+      #{superid,jdbcType=INTEGER}, #{functionurl,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hyxy.entity.Functionaa" >
+    update function
+    set FunctionName = #{functionname,jdbcType=VARCHAR},
+      FunctionRank = #{functionrank,jdbcType=VARCHAR},
+      SuperID = #{superid,jdbcType=INTEGER},
+      FunctionUrl = #{functionurl,jdbcType=VARCHAR}
+    where FunctionID = #{functionid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select FunctionID, FunctionName, FunctionRank, SuperID, FunctionUrl
+    from function
+    where FunctionID = #{functionid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select FunctionID, FunctionName, FunctionRank, SuperID, FunctionUrl
+    from function
+  </select>
+  
+  
+  <select id="functionSelect" resultType="Functionaa">
+  SELECT 
+  fun.FunctionID functionid,
+  fun.FunctionName,
+  fun.FunctionRank,
+  fun.FunctionUrl,
+  jurisdiction.yes 
+  FROM `function` fun LEFT JOIN jurisdiction 
+  ON fun.FunctionID = jurisdiction.FunctionID 
+  WHERE jurisdiction.yes = 1 
+  AND fun.FunctionRank = 1 
+  AND jurisdiction.RoleID = #{roleid}
+  </select>
+  
+  
+  <select id="functionTwo"  resultType="Functionaa">
+  SELECT 
+  fun.FunctionID functionid,
+  fun.FunctionName,
+  fun.SuperID,
+  fun.FunctionUrl 
+  FROM `function` fun,jurisdiction 
+  WHERE fun.FunctionID = jurisdiction.FunctionID 
+  and jurisdiction.yes = 1 
+  and jurisdiction.RoleID = #{roleid} 
+  and fun.FunctionRank = 2
+  </select>
+  
+  <select id="quanxian" resultType="integer">
+  select count(*) count 
+  from `function` fun 
+  LEFT JOIN jurisdiction ju 
+  ON fun.FunctionID = ju.FunctionID 
+  AND RoleID = ${roleid}
+  </select>
+  
+  
+  <select id="fenpei" resultType="Functionaa">
+  SELECT `function`.*,a.yes,b.FunctionName supername 
+  FROM `function` 
+  LEFT JOIN (SELECT * FROM jurisdiction where  RoleID = #{roleid}) a 
+  ON `function`.FunctionID = a.FunctionID 
+  LEFT JOIN `function` b ON `function`.SuperID = b.FunctionID 
+  limit ${begin}, ${number}
+  
+  </select>
+  
+  <select id="countes" resultType="integer">
+  SELECT * from `function` 
+  INNER JOIN jurisdiction 
+  ON `function`.FunctionID = jurisdiction.FunctionID 
+  WHERE RoleID = ${roleid} AND `function`.FunctionID = ${functionid}
+  </select>
+  
+  
+</mapper>

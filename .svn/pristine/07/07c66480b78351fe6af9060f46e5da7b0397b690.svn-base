@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyxy.dao.AdminMapper" >
+  <resultMap id="BaseResultMap" type="com.hyxy.entity.Admin" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="AdminName" property="adminname" jdbcType="VARCHAR" />
+    <result column="Admin_Number" property="adminNumber" jdbcType="INTEGER" />
+    <result column="Password" property="password" jdbcType="VARCHAR" />
+    <result column="RoleID" property="roleid" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from admin
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hyxy.entity.Admin" >
+    insert into admin (ID, AdminName, Admin_Number, 
+      Password, RoleID)
+    values (null, #{adminname,jdbcType=VARCHAR}, #{adminNumber,jdbcType=INTEGER}, 
+      #{password,jdbcType=VARCHAR}, #{roleid,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hyxy.entity.Admin" >
+    update admin
+    set AdminName = #{adminname,jdbcType=VARCHAR},
+      Admin_Number = #{adminNumber,jdbcType=INTEGER},
+      Password = #{password,jdbcType=VARCHAR},
+      RoleID = #{roleid,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select ID, AdminName, Admin_Number, Password, RoleID
+    from admin
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ID, AdminName, Admin_Number, Password, RoleID
+    from admin
+  </select>
+  
+  <select id="selectRole" resultType="Admin">
+  SELECT admin.ID id,admin.AdminName adminname,role.RolerName 'role.rolername'
+  FROM admin INNER JOIN role ON admin.RoleID = role.RoleID
+  </select>
+  
+  <update id="updateRole">
+  UPDATE admin SET RoleID = #{roleid} WHERE ID = #{id}
+  </update>
+  
+  <select id="selectByNumber" resultType="Int">
+    select count(*) count
+    from admin
+    where Admin_Number = ${adminnumber}
+  </select>
+  
+  
+</mapper>

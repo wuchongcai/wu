@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyxy.dao.CourseMapper" >
+  <resultMap id="BaseResultMap" type="com.hyxy.entity.Course" >
+    <id column="CourseNumber" property="coursenumber" jdbcType="INTEGER" />
+    <result column="CourseName" property="coursename" jdbcType="VARCHAR" />
+    <result column="Teacher_Number" property="teacherNumber" jdbcType="INTEGER" />
+    <result column="CourseSemester" property="coursesemester" jdbcType="VARCHAR" />
+    <result column="YearClass" property="yearclass" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from course
+    where CourseNumber = #{coursenumber,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hyxy.entity.Course" >
+    insert into course (CourseNumber, CourseName, Teacher_Number, 
+      CourseSemester, YearClass)
+    values (#{coursenumber,jdbcType=INTEGER}, #{coursename,jdbcType=VARCHAR}, #{teacherNumber,jdbcType=INTEGER}, 
+      #{coursesemester,jdbcType=VARCHAR}, #{yearclass,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hyxy.entity.Course" >
+    update course
+    set CourseName = #{coursename,jdbcType=VARCHAR},
+      Teacher_Number = #{teacherNumber,jdbcType=INTEGER},
+      CourseSemester = #{coursesemester,jdbcType=VARCHAR},
+      YearClass = #{yearclass,jdbcType=VARCHAR}
+    where CourseNumber = #{coursenumber,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select CourseNumber, CourseName, Teacher_Number, CourseSemester, YearClass
+    from course
+    where CourseNumber = #{coursenumber,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select CourseNumber, CourseName, Teacher_Number, CourseSemester, YearClass
+    from course
+  </select>
+  
+  <select id="selectStu" resultType="Course">
+  SELECT student.Student_Number 'student.studentNumber',
+  student.StudentName 'student.studentname',
+  course.CourseNumber coursenumber,
+  course.CourseName coursename,
+  score.Grade 'score.grade' 
+  FROM score,course,student 
+  WHERE score.Student_Number = student.Student_Number 
+  AND score.CourseNumber = course.CourseNumber 
+  AND score.CourseNumber = ${coursenumber} 
+  AND student.Student_Number = ${studentnumber}
+  </select>
+  
+  
+  
+  
+  
+</mapper>
